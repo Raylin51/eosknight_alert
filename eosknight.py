@@ -106,8 +106,10 @@ def checkKnight(account, encodedName):
     currTime = getKnightsCurrTime(encodedName)
     print "maxtime,currTime", maxTime, currTime
     if currTime >= maxTime and currTime - maxTime < 600:
+        checkTime = 30
         return '%s 该复活啦~\n' % (account)
     else:
+        checkTime = 5
         return ''
 
 
@@ -140,6 +142,7 @@ def getEncodedAccount(account):
 
 
 if __name__ == '__main__':
+    checkTime = 5
     ################################################
     sckey = ''  # 你的key
     accounts = {
@@ -163,7 +166,7 @@ if __name__ == '__main__':
             if len(str) > 12:
                 sendToWechat(sckey, str)
             print '========' + time.strftime('%Y.%m.%d %H:%M:%S', time.localtime(time.time())) + '============'
-            time.sleep(60 * 5)  # 每5分钟循环一次
+            time.sleep(60 * checkTime)  # 每5分钟循环一次
         except Exception as e:
             print "有错误！！", e
             time.sleep(20)  # 如果发生错误，延迟20秒再次执行
