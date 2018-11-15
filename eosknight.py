@@ -8,9 +8,8 @@ import json
 import time
 import sys
 
-
 # 计算击杀数
-def calcKillCount(defense, hp, attack, time=864000000000):
+def calcKillCount(defense, hp, attack, time = 864000000000):
     damage_per_min = 25 - (25 * defense) / (defense + 1000)
     alive_sec = (60 * hp) / damage_per_min
     if time < alive_sec:
@@ -106,9 +105,11 @@ def checkKnight(account, encodedName):
     currTime = getKnightsCurrTime(encodedName)
     print "maxtime,currTime", maxTime, currTime
     if currTime >= maxTime and currTime - maxTime < 600:
+        global checkTime
         checkTime = 30
         return '%s 该复活啦~\n' % (account)
     else:
+        global checkTime
         checkTime = 5
         return ''
 
@@ -142,6 +143,7 @@ def getEncodedAccount(account):
 
 
 if __name__ == '__main__':
+    global checkTime
     checkTime = 5
     ################################################
     sckey = ''  # 你的key
