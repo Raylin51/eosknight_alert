@@ -95,6 +95,9 @@ async function checkPetExpedition() {
             msg = '宠物远征结束啦';
         }
     });
+    if (msg === '') {
+        console.log('好像没有远征结束的');
+    }
 }
 
 // 判断能否复活
