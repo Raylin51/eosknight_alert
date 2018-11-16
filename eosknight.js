@@ -91,7 +91,7 @@ async function checkPetExpedition() {
     const pets = dataObj.rows;
     const currTime = Date.now() / 1000 - 1500000000;
     pets.map((pet, index) => {
-        if (pet.isback === 0 && currTime >= pet.end && currTime - pet.end < 6000) {
+        if (pet.isback === 0 && currTime >= pet.end && currTime - pet.end < 600) {
             msg = '宠物远征结束啦';
         }
     });
@@ -155,24 +155,22 @@ async function checkAction() {
         if (getHour >= 1 && getHour <= 9 ) {
             checkTimeStep = 60;
         } else {
-            await checkRebirth().then(() => {
-                if (msg !== '') {
-                    console.log(msg);
-                    sendToWechat(encodeURI(msg));
-                }
-            }).catch((e) => {console.log(e)});
+            await checkRebirth();
+            if (msg !== '') {
+                console.log(`消息：${msg}`);
+                await sendToWechat(encodeURI(msg));
+            }
             await sleep(1);
-            await checkPetExpedition().then(() => {
-                if (msg !== '') {
-                    console.log(msg);
-                    sendToWechat(encodeURI(msg));
-                }
-            }).catch((e) => {console.log(e)});
+            await checkPetExpedition();
+            if (msg !== '') {
+                console.log(`消息：${msg}`);
+                await sendToWechat(encodeURI(msg));
+            }
         }
     }
     catch {
         msg = '出错了！快看日志！';
-        sendToWechat(encodeURI(msg));
+        await sendToWechat(encodeURI(msg));
     }
 }
 
