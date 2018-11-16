@@ -91,12 +91,8 @@ async function checkPetExpedition() {
     const pets = dataObj.rows;
     const currTime = Date.now() / 1000 - 1500000000;
     pets.map((pet, index) => {
-        if (pet.isback === 0 && currTime >= pet.end && currTime - pet.end < 600) {
+        if (pet.isback === 0 && currTime >= pet.end && currTime - pet.end < 6000) {
             msg = '宠物远征结束啦';
-        }
-        if (index === pets.length - 1) {
-            msg = '';
-            console.log('好像没有远征结束的');
         }
     });
 }
@@ -143,7 +139,7 @@ function sendToWechat(msg) {
     axios({
         method: 'POST',
         url: url,
-    });
+    }).then(() => {msg = ''});
 }
 
 // sleep
@@ -159,17 +155,19 @@ async function checkAction() {
         if (getHour >= 1 && getHour <= 9 ) {
             checkTimeStep = 60;
         } else {
-            await checkRebirth();
-            if (msg !== '') {
-                console.log(msg);
-                sendToWechat(encodeURI(msg));
-            }
-            sleep(1);
-            await checkPetExpedition();
-            if (msg !== '') {
-                console.log(msg);
-                sendToWechat(encodeURI(msg));
-            }
+            await checkRebirth().then(() => {
+                if (msg !== '') {
+                    console.log(msg);
+                    sendToWechat(encodeURI(msg));
+                }
+            }).catch((e) => {console.log(e)});
+            await sleep(1);
+            await checkPetExpedition().then(() => {
+                if (msg !== '') {
+                    console.log(msg);
+                    sendToWechat(encodeURI(msg));
+                }
+            }).catch((e) => {console.log(e)});
         }
     }
     catch {
