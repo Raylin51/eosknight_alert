@@ -42,7 +42,7 @@ const getTableData = async table => {
 }
 
 // 算杀人数，目前没用到
-function calcKillCount(defense, hp, attack, time = 864000000000) {
+const calcKillCount = (defense, hp, attack, time = 864000000000) => {
     let damage_per_min = 25 - (25 * defense) / (defense + 1000);
     let alive_sec = (60 * hp) / damage_per_min;
     if (time < alive_sec) {
@@ -52,14 +52,14 @@ function calcKillCount(defense, hp, attack, time = 864000000000) {
     return current_kill_count;
 }
 
-function calcKillAliveTime(defense, hp) {
+const calcKillAliveTime = (defense, hp) => {
     let damage_per_min = 25 - (25 * defense) / (defense + 1000);
     let alive_sec = (60 * hp) / damage_per_min;
     return alive_sec;
 }
 
 // 计算最大时间
-async function getKnightsMaxTime() {
+const getKnightsMaxTime = async () => {
     const dataObj = await getTableData('knight');
     const knights = ['knight', 'archer', 'mage'];
     const knightsObj = {};
@@ -78,7 +78,7 @@ async function getKnightsMaxTime() {
 }
 
 // 获取当前时间
-async function getKnightsCurrTime() {
+const getKnightsCurrTime = async () => {
     const dataObj = await getTableData('player');
     const lastRebirthTime = dataObj.last_rebirth;
     const currTime = Date.now() / 1000 - 1500000000 - lastRebirthTime;
@@ -86,7 +86,7 @@ async function getKnightsCurrTime() {
 }
 
 // 判断宠物远征
-async function checkPetExpedition() {
+const checkPetExpedition = async () => {
     const dataObj = await getTableData('petexp');
     const pets = dataObj.rows;
     const currTime = Date.now() / 1000 - 1500000000;
@@ -101,7 +101,7 @@ async function checkPetExpedition() {
 }
 
 // 判断能否复活
-async function checkRebirth() {
+const checkRebirth = async () => {
     let maxTime, currTime;
     await getKnightsMaxTime().then(res => {maxTime = res});
     await getKnightsCurrTime().then(res => {currTime = res});
@@ -114,13 +114,13 @@ async function checkRebirth() {
 }
 
 // 获取字母序号
-function getLetterNumber(letter) {
+const getLetterNumber = letter => {
     const strMap = '.12345abcdefghijklmnopqrstuvwxyz';
     return strMap.indexOf(letter) * 16
 }
 
 // 获取账号的big number（天晓得这是啥）
-function getEncodeAccount(account) {
+const getEncodeAccount = account => {
     try {
         account = account.padStart(12, '.');
         let ret = 0;
@@ -130,15 +130,14 @@ function getEncodeAccount(account) {
             ret = ret + Math.pow(32, index) * letterNumber;
         });
         return ret;
-    }
-    catch (e) {
+    } catch (e) {
         console.log(e);
         console.log('账号出错啦！');
     }
 }
 
 // 微信推送
-function sendToWechat(msg) {
+const sendToWechat = msg => {
     let url = `https://sc.ftqq.com/${sckey}.send?text=${msg}`;
     axios({
         method: 'POST',
@@ -147,7 +146,7 @@ function sendToWechat(msg) {
 }
 
 // sleep
-const sleep = (m) => {
+const sleep = m => {
     return new Promise((resolve, reject) => {
         setTimeout(resolve, 1000 * 60 * m);
     }).catch(e => reject(e));
@@ -171,8 +170,7 @@ async function checkAction() {
                 await sendToWechat(encodeURI(msg));
             }
         }
-    }
-    catch (e) {
+    } catch (e) {
         console.log(e);
         msg = '出错了！快看日志！';
         await sendToWechat(encodeURI(msg));
