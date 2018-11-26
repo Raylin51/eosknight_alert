@@ -131,7 +131,8 @@ function getEncodeAccount(account) {
         });
         return ret;
     }
-    catch {
+    catch (e) {
+        console.log(e);
         console.log('账号出错啦！');
     }
 }
@@ -171,7 +172,8 @@ async function checkAction() {
             }
         }
     }
-    catch {
+    catch (e) {
+        console.log(e);
         msg = '出错了！快看日志！';
         await sendToWechat(encodeURI(msg));
     }
